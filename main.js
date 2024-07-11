@@ -1,45 +1,64 @@
 let newsList = [];
 const menu = document.querySelectorAll(".menu button")
+const sideMenu = document.querySelectorAll(".side-menu-list button")
 menu.forEach(menu=>menu.addEventListener("click",(event)=>getNewsByCategory(event)))
+let inputArea = document.getElementById("input-area")
+sideMenu.forEach(sideMenu=>sideMenu.addEventListener("click",(event)=>getNewsByCategory(event)))
+let searchButton = document.getElementById("search-button")
+inputArea.addEventListener("keydown",(event) => {
+  if(event.key === 'Enter') {
+    getNewsByKeyword();
+  }
+})
+
+
+let url = new URL(`https://news-site-e2dedb.netlify.app/top-headlines`
+
+);
+
+const getNews = async () => {
+  const response = await fetch(url);
+  const data = await response.json();
+  newsList = data.articles;
+  render();
+}
 
 const getLatestNews = async () => {
 
     let url = new URL(`https://news-site-e2dedb.netlify.app/top-headlines`);
     
-    const response = await fetch(url);
-    const data = await response.json();
-    newsList = data.articles;
-    render();
-    console.log("news", newsList);
+    getNews();
 };
-
-const openSearchBox = () => {
-    let inputArea = document.getElementById("input-area");
-    if (inputArea.style.display === "inline") {
-      inputArea.style.display = "none";
-    } else {
-      inputArea.style.display = "inline";
-    }
-  };
-
-  const openNav = () => {
-    document.getElementById("mySidenav").style.width = "250px";
-  };
-  
-  const closeNav = () => {
-    document.getElementById("mySidenav").style.width = "0";
-  };
 
 const getNewsByCategory = async (event) => {
     const category = event.target.textContent.toLowerCase();
-    console.log("category", category);
-    const url = new URL(`https://news-site-e2dedb.netlify.app/top-headlines?country=kr&category=${category}`);
-    //const url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&category=${category}&apiKey=${API_KEY}`);
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log("ddd",data);
-    newsList = data.articles;
-    render();
+    url = new URL(`https://news-site-e2dedb.netlify.app/top-headlines?country=kr&category=${category}`);
+
+    getNews();
+};
+
+const getNewsByKeyword = async () => {
+  const keyword = document.getElementById("search-input").value;
+  url = new URL (`https://news-site-e2dedb.netlify.app/top-headlines?country=kr&q=${keyword}`);
+  getNews();
+};
+
+const openNav = () => {
+  document.getElementById("mySidenav").style.width = "250px";
+};
+
+const closeNav = () => {
+  document.getElementById("mySidenav").style.width = "0";
+};
+
+const openSearchBox = () => {
+  let inputArea = document.getElementById("input-area");
+  if (inputArea.style.display === "inline") {
+    inputArea.style.display = "none";
+  } else {
+    inputArea.style.display = "inline";
+  }
+ 
 };
 
 const render=()=>{
