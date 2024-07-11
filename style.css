@@ -22,7 +22,27 @@
 }
 
 .menu button:hover{
-    background-color: lightgrey;
+    background-color: burlywood;
+    transition:1s;
+}
+
+.area-input{
+  display:none;
+}
+
+.search-area{
+  margin-top:20px;
+}
+
+.search-icon{
+  border:0px;
+  background:transparent;
+}
+
+.go-button{
+  border:0px;
+  border-radius:5px;
+  background-color:bisque;
 }
 
 .news-img-size{
@@ -38,10 +58,6 @@
 
 h2{
     margin-top:1em;
-}
-
-.icon-button{
-    margin-left:2em;
 }
 
 .side-menu {
@@ -82,4 +98,32 @@ h2{
   .side-menu-list button:hover {
     background-color: beige;
     border-radius: 3px;
+    transition: 1s;
+  }
+
+  .fa-bars{
+    text-align: center;
+    border:0px;
+    font-size:20px;
+    display: none;
+  }
+
+  .listButton{
+    margin-left:5vw;
+    position:absolute;
+    top:10hw;
+    background-color: transparent;
+    border:0px;
+  }
+
+  @media screen and (max-width: 375px){
+    .menu{
+        display: none;
+    }
+    .fa-bars{
+      display: inline;
+    }
+    .search-area{
+      margin-left:15vw;
+    }
   }
