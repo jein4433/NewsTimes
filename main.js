@@ -12,7 +12,7 @@ inputArea.addEventListener("keydown",(event) => {
 })
 
 
-let url = new URL(`https://news-ste-e2dedb.netlify.app/top-headlines`
+let url = new URL(`https://news-site-e2dedb.netlify.app/top-headlines`
 
 );
 
