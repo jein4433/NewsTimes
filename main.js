@@ -12,16 +12,29 @@ inputArea.addEventListener("keydown",(event) => {
 })
 
 
-let url = new URL(`https://news-site-e2dedb.netlify.app/top-headlines`
+let url = new URL(`https://news-ste-e2dedb.netlify.app/top-headlines`
 
 );
 
 const getNews = async () => {
-  const response = await fetch(url);
-  const data = await response.json();
-  newsList = data.articles;
-  render();
+  try{
+    const response = await fetch(url);
+    const data = await response.json();
+    if (response.status === 200){
+      if(data.articles.length === 0){
+        throw new Error("No results for you search.");
+      }
+      newsList = data.articles;
+      render();
+    }else{
+      throw new Error(data.message)
+    }
+  }catch(error){
+    console.log("error",error.message)
+    errorRender(error.message);
 }
+
+};
 
 const getLatestNews = async () => {
 
@@ -89,6 +102,14 @@ const render=()=>{
         </div>`
    }).join('');
 document.getElementById("news-board").innerHTML=newsHTML;
+};
+
+const errorRender = (errorMessage) =>{
+  const errorHTML = `<div class="alert alert-danger" role="alert">
+  ${errorMessage}
+</div>`;
+
+document.getElementById("news-board").innerHTML = errorHTML;
 };
 
 getLatestNews();
