@@ -19,7 +19,7 @@ let url = new URL(`https://news-site-e2dedb.netlify.app/top-headlines`
 let totalResults = 0;
 let page = 1;
 const pageSize = 10; //let
-const groupSize = 5;
+const groupSize = 20;
 
 
 const getNews = async () => {
@@ -56,6 +56,7 @@ const getLatestNews = async () => {
 const getNewsByCategory = async (event) => {
     const category = event.target.textContent.toLowerCase();
     url = new URL(`https://news-site-e2dedb.netlify.app/top-headlines?country=kr&category=${category}`);
+    page = 1;
 
     getNews();
 };
@@ -63,6 +64,7 @@ const getNewsByCategory = async (event) => {
 const getNewsByKeyword = async () => {
   const keyword = document.getElementById("search-input").value;
   url = new URL (`https://news-site-e2dedb.netlify.app/top-headlines?country=kr&q=${keyword}`);
+  page = 1;
   getNews();
 };
 
@@ -124,34 +126,40 @@ document.getElementById("news-board").innerHTML = errorHTML;
 
 const paginationRender = () => {
   const totalPages = Math.ceil(totalResults / pageSize)
-  const pageGroup = Math.ceil(page / groupSize);
-  let lastPage = pageGroup * groupSize;
+  const pageGroup = Math.ceil(page / 5);
+  let last = pageGroup * 5;
+  if (last > totalPages) {
+    last = totalPages;
+  }
+  let first = last - 4 <= 0 ? 1 : last - 4;
+    let lastPage = pageGroup * groupSize;
+  let paginationHTML = ``;
   if (lastPage > totalPages){
     lastPage = totalPages
   }
   const firstPage = lastPage - (groupSize - 1)<=0? 1: lastPage - (groupSize -1);
 
-  let paginationHTML = ``;
+  if (page > 1){
+   paginationHTML = `<li class="page-item" onclick="moveToPage(1)"><a class="page-link"><<</a></li>
+   <li class="page-item" onclick="moveToPage(${page - 1})"><a class="page-link"><</a></li>
+  `;
+  }
 
-  for (let i=firstPage; i<=lastPage; i++){
+  for (let i=first; i<=last; i++){
     paginationHTML+=`<li class="page-item ${i===page?"active":''}" onclick="moveToPage(${i})"><a class="page-link">${i}</a></li>`
   }
-  document.querySelector(".pagination").innerHTML=paginationHTML
 
-//   <nav aria-label="Page navigation example">
-//   <ul class="pagination">
-//     <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-//     <li class="page-item"><a class="page-link" href="#">1</a></li>
-//     <li class="page-item"><a class="page-link" href="#">2</a></li>
-//     <li class="page-item"><a class="page-link" href="#">3</a></li>
-//     <li class="page-item"><a class="page-link" href="#">Next</a></li>
-//   </ul>
-// </nav>
+  if (page < lastPage){
+  paginationHTML += `<li class="page-item" onclick="moveToPage(${page + 1})"><a class="page-link">></a></li>
+  <li class="page-item" onclick="moveToPage(${lastPage})"><a class="page-link">>></a></li>`
+}
+  document.querySelector(".pagination").innerHTML=paginationHTML
 };
 
 const moveToPage = (pageNum) => {
   console.log("move",pageNum);
   page = pageNum;
+  window.scrollTo({top:0 , behaviour: "smooth"})
   getNews();
 }
 
